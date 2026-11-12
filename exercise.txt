@@ -1,0 +1,260 @@
+Ex. 8 React User Interactions: onChange and onSubmit — Step by Step 
+React forms mainly use onChange and onSubmit to handle user interactions. 
+User enters data 
+      ↓ 
+   onChange 
+      ↓ 
+Update React state 
+      ↓ 
+User clicks Submit 
+      ↓ 
+   onSubmit 
+      ↓ 
+Validate / Process data 
+ 
+1. onChange Event 
+What is onChange? 
+onChange is triggered whenever the value of an input element changes. 
+Example: 
+<input onChange={handleChange} /> 
+It is commonly used with: 
+• Text boxes 
+• Email fields 
+• Password fields 
+• Checkboxes 
+• Select/dropdown elements 
+ 
+2. Step 1 — Create State 
+First, import useState: 
+import { useState } from "react"; 
+Create a state variable: 
+const [name, setName] = useState(""); 
+Here: 
+• name → stores the input value 
+• setName → updates the value 
+• "" → initial value 
+
+ 
+3. Step 2 — Create onChange Handler 
+const handleChange = (event) => { 
+  setName(event.target.value); 
+}; 
+event.target.value gets the value entered by the user. 
+ 
+4. Step 3 — Connect onChange 
+<input 
+  type="text" 
+  value={name} 
+  onChange={handleChange} 
+/> 
+Flow 
+User types "Ajith" 
+       ↓ 
+   onChange 
+       ↓ 
+handleChange() 
+       ↓ 
+event.target.value 
+       ↓ 
+setName("Ajith") 
+       ↓ 
+React state updated 
+ 
+5. onSubmit Event 
+What is onSubmit? 
+onSubmit is triggered when the user submits a form. 
+Example: 
+<form onSubmit={handleSubmit}> 
+Usually, the form is submitted by clicking: 
+<button type="submit">Submit</button> 
+ 
+6. Step 1 — Create Submit Handler 
+const handleSubmit = (event) => { 
+  event.preventDefault(); 
+ 
+  alert("Form submitted!"); 
+}; 
+
+Why preventDefault()? 
+event.preventDefault(); 
+prevents the browser from performing its normal form submission behavior, such as reloading the 
+page. 
+ 
+7. Complete onChange + onSubmit Example 
+import { useState } from "react"; 
+ 
+function App() { 
+ 
+  const [name, setName] = useState(""); 
+ 
+  const handleChange = (event) => { 
+    setName(event.target.value); 
+  }; 
+ 
+  const handleSubmit = (event) => { 
+    event.preventDefault(); 
+ 
+    alert("Hello " + name); 
+  }; 
+ 
+  return ( 
+    <div> 
+      <h1>Student Form</h1> 
+ 
+      <form onSubmit={handleSubmit}> 
+ 
+        <input 
+          type="text" 
+          value={name} 
+          onChange={handleChange} 
+          placeholder="Enter your name" 
+        /> 
+ 
+        <button type="submit"> 
+          Submit 
+        </button> 
+ 
+      </form> 
+    </div> 
+  ); 
+} 
+ 
+export default App; 
+ 
+8. How the Complete Program Works 
+Suppose the user enters: 
+Ajith 
+
+Step 1 — User types 
+Ajith 
+Step 2 — onChange fires 
+onChange={handleChange} 
+Step 3 — State is updated 
+setName(event.target.value); 
+Now: 
+name = "Ajith" 
+Step 4 — User clicks Submit 
+<button type="submit"> 
+  Submit 
+</button> 
+Step 5 — onSubmit fires 
+<form onSubmit={handleSubmit}> 
+Step 6 — Data is processed 
+alert("Hello " + name); 
+Output: 
+Hello Ajith 
+ 
+9. Visual Flow 
+                 React Form 
+                     │ 
+          ┌──────────┴──────────┐ 
+          ↓                     ↓ 
+       User types          User submits 
+          ↓                     ↓ 
+      onChange              onSubmit 
+          ↓                     ↓ 
+   handleChange()        handleSubmit() 
+          ↓                     ↓ 
+    Update state          preventDefault() 
+          ↓                     ↓ 
+    setName(value)        Process data 
+          └──────────┬──────────┘ 
+                     ↓ 
+                 React UI 
+ 
+10. Example with Name and Email 
+We can handle multiple fields using one state object. 
+import { useState } from "react"; 
+
+ 
+function App() { 
+ 
+  const [formData, setFormData] = useState({ 
+    name: "", 
+    email: "" 
+  }); 
+ 
+  const handleChange = (event) => { 
+    const { name, value } = event.target; 
+ 
+    setFormData({ 
+      ...formData, 
+      [name]: value 
+    }); 
+  }; 
+ 
+  const handleSubmit = (event) => { 
+    event.preventDefault(); 
+ 
+    console.log(formData); 
+    alert("Form submitted successfully!"); 
+  }; 
+ 
+  return ( 
+    <div> 
+      <h1>Registration Form</h1> 
+ 
+      <form onSubmit={handleSubmit}> 
+ 
+        <input 
+          type="text" 
+          name="name" 
+          value={formData.name} 
+          onChange={handleChange} 
+          placeholder="Enter name" 
+        /> 
+ 
+        <br /><br /> 
+ 
+        <input 
+          type="email" 
+          name="email" 
+          value={formData.email} 
+          onChange={handleChange} 
+          placeholder="Enter email" 
+        /> 
+ 
+        <br /><br /> 
+ 
+        <button type="submit"> 
+          Submit 
+        </button> 
+ 
+      </form> 
+    </div> 
+  ); 
+} 
+ 
+
+export default App; 
+State after entering data: 
+{ 
+  name: "Ajith", 
+  email: "ajith@example.com" 
+} 
+ 
+11. onChange vs onSubmit 
+onChange 
+onSubmit 
+Handles input changes 
+Handles form submission 
+Runs when value changes 
+Runs when form is submitted 
+Used with <input> etc. 
+Used with <form> 
+Updates state 
+Processes/validates data 
+event.target.value is commonly used 
+event.preventDefault() is commonly used 
+ 
+Exam Answer 
+What is onChange? 
+onChange is a React event used to detect changes in form input values. It is commonly 
+used with useState to update the component state. 
+What is onSubmit? 
+onSubmit is a React event used to handle form submission. It is commonly used with 
+event.preventDefault() to prevent the default browser behavior. 
+Easy formula: 
+onChange → Capture user input → Update State 
+onSubmit → Submit form → Validate/Process Data 
+ 
